@@ -3,6 +3,7 @@ package me.heaton.tennis
 import kotlin.math.abs
 
 class TennisGame(private val firstPlayer: String, private val secondPlayer: String) {
+    private var scoreEvents = mutableListOf<String>()
     private var _firstPlayerPoint = 0
     private var _secondPlayerPoint = 0
     private val scoreHistory = mutableListOf(score())
@@ -31,6 +32,7 @@ class TennisGame(private val firstPlayer: String, private val secondPlayer: Stri
 
     fun firstPlayerScores() {
         if ("wins" in score()) throw GameEndedException()
+        scoreEvents.add(firstPlayer)
         addScoreFor(firstPlayer)
         scoreHistory.add(score())
     }
@@ -44,6 +46,7 @@ class TennisGame(private val firstPlayer: String, private val secondPlayer: Stri
 
     fun secondPlayerScores() {
         if ("wins" in score()) throw GameEndedException()
+        scoreEvents.add(secondPlayer)
         addScoreFor(secondPlayer)
         scoreHistory.add(score())
     }
