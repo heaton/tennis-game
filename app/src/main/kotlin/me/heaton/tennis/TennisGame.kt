@@ -31,13 +31,20 @@ class TennisGame(private val firstPlayer: String, private val secondPlayer: Stri
 
     fun firstPlayerScores() {
         if ("wins" in score()) throw GameEndedException()
-        _firstPlayerPoint++
+        addScoreFor(firstPlayer)
         scoreHistory.add(score())
+    }
+
+    private fun addScoreFor(player: String) {
+        if (player == firstPlayer)
+            _firstPlayerPoint++
+        else
+            _secondPlayerPoint++
     }
 
     fun secondPlayerScores() {
         if ("wins" in score()) throw GameEndedException()
-        _secondPlayerPoint++
+        addScoreFor(secondPlayer)
         scoreHistory.add(score())
     }
 
