@@ -123,5 +123,22 @@ class TennisGameSpec : WordSpec({
                 game.secondPlayerScores()
             }.message shouldBe "the game has ended"
         }
+
+        "review the game" {
+            game.firstPlayerScores()
+            game.secondPlayerScores()
+            game.firstPlayerScores()
+            game.firstPlayerScores()
+            game.firstPlayerScores()
+            game.review() shouldBe """
+                A, B
+                love, love
+                15, love
+                15, 15
+                30, 15
+                40, 15
+                A wins
+            """.trimIndent()
+        }
     }
 })

@@ -5,6 +5,7 @@ import kotlin.math.abs
 class TennisGame(private val firstPlayer: String, private val secondPlayer: String) {
     private var firstPlayerPoint = 0
     private var secondPlayerPoint = 0
+    private val scoreHistory = mutableListOf(score())
 
     fun score(): String =
         when {
@@ -28,10 +29,18 @@ class TennisGame(private val firstPlayer: String, private val secondPlayer: Stri
     fun firstPlayerScores() {
         if ("wins" in score()) throw GameEndedException()
         firstPlayerPoint++
+        scoreHistory.add(score())
     }
 
     fun secondPlayerScores() {
         if ("wins" in score()) throw GameEndedException()
         secondPlayerPoint++
+        scoreHistory.add(score())
     }
+
+    fun review(): String = """
+        |$firstPlayer, $secondPlayer
+        |${scoreHistory.joinToString("\n")}
+    """.trimMargin()
+
 }
