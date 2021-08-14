@@ -4,18 +4,11 @@ import kotlin.math.abs
 
 class TennisGame(private val firstPlayer: String, private val secondPlayer: String) {
     private var scoreEvents = mutableListOf<String>()
-    private var points = Pair(0, 0)
     private val scoreHistory = mutableListOf(score())
 
-    private fun firstPlayerPoint(): Int {
-        calculatePoints()
-        return points.first
-    }
+    private fun firstPlayerPoint(): Int = points().first
 
-    private fun secondPlayerPoint(): Int {
-        calculatePoints()
-        return points.second
-    }
+    private fun secondPlayerPoint(): Int = points().second
 
     fun score(): String =
         when {
@@ -42,9 +35,7 @@ class TennisGame(private val firstPlayer: String, private val secondPlayer: Stri
         scoreHistory.add(score())
     }
 
-    private fun calculatePoints() {
-        points = scoreEvents.fold(Pair(0, 0), ::addScoreForPlayer)
-    }
+    private fun points() = scoreEvents.fold(Pair(0, 0), ::addScoreForPlayer)
 
     private fun addScoreForPlayer(previousScore: Pair<Int, Int>, player: String) = with(previousScore) {
         if (player == firstPlayer) Pair(first + 1, second) else Pair(first, second + 1)
