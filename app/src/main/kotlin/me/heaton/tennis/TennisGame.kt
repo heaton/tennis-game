@@ -38,10 +38,13 @@ class TennisGame(private val firstPlayer: String, private val secondPlayer: Stri
     }
 
     private fun addScoreFor(player: String) {
-        if (player == firstPlayer)
-            _firstPlayerPoint++
-        else
-            _secondPlayerPoint++
+        val currentPoints = Pair(_firstPlayerPoint, _secondPlayerPoint)
+        _firstPlayerPoint = addScoreForPlayer(currentPoints, player).first
+        _secondPlayerPoint = addScoreForPlayer(currentPoints, player).second
+    }
+
+    private fun addScoreForPlayer(previousScore: Pair<Int, Int>, player: String) = with(previousScore) {
+        if (player == firstPlayer) Pair(first + 1, second) else Pair(first, second + 1)
     }
 
     fun secondPlayerScores() {
