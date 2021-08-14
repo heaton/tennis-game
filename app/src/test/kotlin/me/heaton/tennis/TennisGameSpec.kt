@@ -1,5 +1,6 @@
 package me.heaton.tennis
 
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
@@ -108,6 +109,19 @@ class TennisGameSpec : WordSpec({
             game.secondPlayerScores()
             game.secondPlayerScores()
             game.score() shouldBe "B wins"
+        }
+
+        "throw exception for scores if game has end" {
+            game.firstPlayerScores()
+            game.firstPlayerScores()
+            game.firstPlayerScores()
+            game.firstPlayerScores()
+            shouldThrow<GameEndedException> {
+                game.firstPlayerScores()
+            }.message shouldBe "the game has ended"
+            shouldThrow<GameEndedException> {
+                game.secondPlayerScores()
+            }.message shouldBe "the game has ended"
         }
     }
 })

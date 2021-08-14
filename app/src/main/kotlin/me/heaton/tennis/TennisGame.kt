@@ -14,7 +14,7 @@ class TennisGame(private val firstPlayer: String, private val secondPlayer: Stri
             else -> "${scoreOf(firstPlayerPoint)}, ${scoreOf(secondPlayerPoint)}"
         }
 
-    private fun betterPlayer(): String = if(firstPlayerPoint > secondPlayerPoint) firstPlayer else secondPlayer
+    private fun betterPlayer(): String = if (firstPlayerPoint > secondPlayerPoint) firstPlayer else secondPlayer
 
     private fun afterDeuce() = firstPlayerPoint > 2 && secondPlayerPoint > 2
 
@@ -26,10 +26,12 @@ class TennisGame(private val firstPlayer: String, private val secondPlayer: Stri
     }
 
     fun firstPlayerScores() {
+        if ("wins" in score()) throw GameEndedException()
         firstPlayerPoint++
     }
 
     fun secondPlayerScores() {
+        if ("wins" in score()) throw GameEndedException()
         secondPlayerPoint++
     }
 }
