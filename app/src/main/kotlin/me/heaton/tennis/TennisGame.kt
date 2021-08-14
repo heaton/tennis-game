@@ -7,8 +7,15 @@ class TennisGame(private val firstPlayer: String, private val secondPlayer: Stri
     private var points = Pair(0, 0)
     private val scoreHistory = mutableListOf(score())
 
-    private fun firstPlayerPoint() = points.first
-    private fun secondPlayerPoint() = points.second
+    private fun firstPlayerPoint(): Int {
+        calculatePoints()
+        return points.first
+    }
+
+    private fun secondPlayerPoint(): Int {
+        calculatePoints()
+        return points.second
+    }
 
     fun score(): String =
         when {
@@ -32,7 +39,6 @@ class TennisGame(private val firstPlayer: String, private val secondPlayer: Stri
     fun firstPlayerScores() {
         if ("wins" in score()) throw GameEndedException()
         scoreEvents.add(firstPlayer)
-        calculatePoints()
         scoreHistory.add(score())
     }
 
@@ -47,7 +53,6 @@ class TennisGame(private val firstPlayer: String, private val secondPlayer: Stri
     fun secondPlayerScores() {
         if ("wins" in score()) throw GameEndedException()
         scoreEvents.add(secondPlayer)
-        calculatePoints()
         scoreHistory.add(score())
     }
 
