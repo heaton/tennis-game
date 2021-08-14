@@ -32,12 +32,12 @@ class TennisGame(private val firstPlayer: String, private val secondPlayer: Stri
     fun firstPlayerScores() {
         if ("wins" in score()) throw GameEndedException()
         scoreEvents.add(firstPlayer)
-        addScoreFor(firstPlayer)
+        calculatePoints()
         scoreHistory.add(score())
     }
 
-    private fun addScoreFor(player: String) {
-        points = addScoreForPlayer(points, player)
+    private fun calculatePoints() {
+        points = scoreEvents.fold(Pair(0, 0), ::addScoreForPlayer)
     }
 
     private fun addScoreForPlayer(previousScore: Pair<Int, Int>, player: String) = with(previousScore) {
@@ -47,7 +47,7 @@ class TennisGame(private val firstPlayer: String, private val secondPlayer: Stri
     fun secondPlayerScores() {
         if ("wins" in score()) throw GameEndedException()
         scoreEvents.add(secondPlayer)
-        addScoreFor(secondPlayer)
+        calculatePoints()
         scoreHistory.add(score())
     }
 
