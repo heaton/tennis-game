@@ -1,5 +1,7 @@
 # Tennis Game Kata
 
+## The Problem
+
 The scoring system is rather simple:
 
 1. Each player can have either of these points in one game “love” “15” “30” “40” 
@@ -14,3 +16,9 @@ Alternate description of the rules on [Wikipedia](http://en.wikipedia.org/wiki/T
 ### Reference
 
 * https://codingdojo.org/kata/Tennis/
+
+## Event Sourcing
+
+This is a very good kata to explain [the difference](app/src/main/kotlin/me/heaton/es/GenericService.kt) between event sourcing and the traditional state management.
+
+Check the [slices](event-sourcing.pdf) for more information.
