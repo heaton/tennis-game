@@ -2,22 +2,38 @@ package me.heaton.tennis
 
 import kotlin.math.abs
 
+typealias Points = Pair<Int, Int>
+
 class TennisGame(private val firstPlayer: String, private val secondPlayer: String) {
-    private var firstPlayerPoint = 0
-    private var secondPlayerPoint = 0
-    private val scoreHistory = mutableListOf(score())
+    private val scoreEvents = mutableListOf<String>()
 
-    fun score(): String =
+    fun firstPlayerScores() = playerScores(firstPlayer)
+
+    fun secondPlayerScores() = playerScores(secondPlayer)
+
+    private fun playerScores(player: String) {
+        if ("wins" in score()) throw GameEndedException()
+        scoreEvents.add(player)
+    }
+
+    fun score(): String = score(points(scoreEvents))
+
+    private fun points(events: List<String>) = with(events) {
+        Pair(count { it == firstPlayer }, count { it == secondPlayer })
+    }
+
+    private fun score(points: Points) = with(points) {
         when {
-            afterDeuce() && firstPlayerPoint == secondPlayerPoint -> "deuce"
-            afterDeuce() && abs(firstPlayerPoint - secondPlayerPoint) == 1 -> "advantage ${betterPlayer()}"
-            firstPlayerPoint > 3 || secondPlayerPoint > 3 -> "${betterPlayer()} wins"
-            else -> "${scoreOf(firstPlayerPoint)}, ${scoreOf(secondPlayerPoint)}"
+            afterDeuce() && first == second -> "deuce"
+            afterDeuce() && abs(first - second) == 1 -> "advantage ${betterPlayer()}"
+            first > 3 || second > 3 -> "${betterPlayer()} wins"
+            else -> "${scoreOf(first)}, ${scoreOf(second)}"
         }
+    }
 
-    private fun betterPlayer(): String = if (firstPlayerPoint > secondPlayerPoint) firstPlayer else secondPlayer
+    private fun Points.afterDeuce() = first > 2 && second > 2
 
-    private fun afterDeuce() = firstPlayerPoint > 2 && secondPlayerPoint > 2
+    private fun Points.betterPlayer(): String = if (first > second) firstPlayer else secondPlayer
 
     private fun scoreOf(point: Int) = when (point) {
         0 -> "love"
@@ -26,21 +42,15 @@ class TennisGame(private val firstPlayer: String, private val secondPlayer: Stri
         else -> "40"
     }
 
-    fun firstPlayerScores() {
-        if ("wins" in score()) throw GameEndedException()
-        firstPlayerPoint++
-        scoreHistory.add(score())
-    }
-
-    fun secondPlayerScores() {
-        if ("wins" in score()) throw GameEndedException()
-        secondPlayerPoint++
-        scoreHistory.add(score())
-    }
-
     fun review(): String = """
         |$firstPlayer, $secondPlayer
-        |${scoreHistory.joinToString("\n")}
+        |${scoreHistory().joinToString("\n")}
     """.trimMargin()
+
+    private fun scoreHistory() = scoreEvents.histories().map(::points).map(::score)
+
+    private fun <T> List<T>.histories() = fold(listOf(emptyList<T>())) { acc, event ->
+        acc.plusElement(acc.last() + event)
+    }
 
 }
